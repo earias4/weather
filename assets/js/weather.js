@@ -47,6 +47,7 @@ let loadWeekForecastData = (ciudad = 'Guayaquil') => {
 
     let padre = document.getElementsByClassName("list-group")
     padre = padre[0]
+    padre.innerHTML = " "
     for (let dia of prediccion){
         let tmin = dia["temperature"]["min"];
         let tmax = dia["temperature"]["max"];
@@ -102,13 +103,18 @@ let element = document.getElementById("dropdownMenuButton");
     let ciudad = event.target.value
     loadDayForecastData(ciudad);
     
-    // let padre = document.getElementsByClassName("list-group")
-    // padre = padre[0]
-    // padre.innerHTML= " "
+    let padre = document.getElementsByClassName("list-group")
+    padre = padre[0]
+    padre.innerHTML = " "
+    
+    
+    let element = document.getElementById('loadinfo');
 
-    loadWeekForecastData(ciudad);
+    element.addEventListener('click', (event) => {
     
-    
+        loadWeekForecastData(ciudad);
+    });
+
 
 });
 
