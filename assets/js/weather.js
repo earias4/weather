@@ -13,10 +13,31 @@ let loadDayForecastData = () => {
             elem.innerHTML=gye[prop]
         }
     }
-	
+
+    let forecast_today = gye["forecast_today"];
+    
+
+    for (let objeto of forecast_today){
+        let buscar =objeto["lapse"]
+        for (let clave in objeto){
+            find = buscar + "_" + clave;
+            console.log(find);
+            let elem = document.getElementById(find);
+            if (elem!=null){
+                elem.innerHTML=objeto[clave]
+            }
+        }
+    }
 }
 
+
+
+
 let loadWeekForecastData = () => {
+
+    window.addEventListener('DOMContentLoaded', (event) => {
+        console.log('DOM fully loaded and parsed');
+    });
 
     let prediccion =weather_data[0]["forecast_week"];
 
@@ -36,7 +57,7 @@ let loadWeekForecastData = () => {
       <div class="ms-4"><i class="material-icons fs-2 me-1 rainy">${dia["icon"]}</i></div>
     </div>
   </li>`
-  padre.innerHTML += contenido;
+    padre.innerHTML += contenido;
     }
     
 	
@@ -44,5 +65,16 @@ let loadWeekForecastData = () => {
 }
 
 
-loadDayForecastData();
-loadWeekForecastData();
+document.addEventListener("DOMContentLoaded", (event) => {
+    loadDayForecastData();
+    let element = document.getElementById('loadinfo');
+
+    element.addEventListener('click', (event) => {
+    loadWeekForecastData();
+    });
+});
+
+
+
+
+
