@@ -1,27 +1,33 @@
-
-
 import { weather_data } from './data.js';
 
 
 
-let loadDayForecastData = () => {
-    let [gye,...others]=weather_data;
+function findCity(ciudad){
+    for (let elemento of weather_data){
+        if (elemento["city"]==ciudad){
+            return elemento
+        }
 
-    for (let prop in gye){
+    }
+}
+
+let loadDayForecastData = (ciudad = "Guayaquil") => {
+    let selectedCity = findCity(ciudad);
+
+    for (let prop in selectedCity){
         let elem = document.getElementById(prop);
         if (elem!=null){
-            elem.innerHTML=gye[prop]
+            elem.innerHTML=selectedCity[prop]
         }
     }
 
-    let forecast_today = gye["forecast_today"];
+    let forecast_today = selectedCity["forecast_today"];
     
 
     for (let objeto of forecast_today){
         let buscar =objeto["lapse"]
         for (let clave in objeto){
             find = buscar + "_" + clave;
-            console.log(find);
             let elem = document.getElementById(find);
             if (elem!=null){
                 elem.innerHTML=objeto[clave]
@@ -33,13 +39,11 @@ let loadDayForecastData = () => {
 
 
 
-let loadWeekForecastData = () => {
+let loadWeekForecastData = (ciudad = 'Guayaquil') => {
 
-    window.addEventListener('DOMContentLoaded', (event) => {
-        console.log('DOM fully loaded and parsed');
-    });
+    let selectedCity = findCity(ciudad)
 
-    let prediccion =weather_data[0]["forecast_week"];
+    let prediccion =selectedCity["forecast_week"];
 
     let padre = document.getElementsByClassName("list-group")
     padre = padre[0]
@@ -65,13 +69,47 @@ let loadWeekForecastData = () => {
 }
 
 
+let cargarCiudades =() => {
+    let element = document.getElementById('dropdownMenuButton');
+    for (let item of weather_data){
+        let ciudad = item["city"]
+        let contenido = `<option value="" selected disabled hidden>Seleccione una ciudad</option>
+        <option class="dropdown-item" value="${ciudad}">${ciudad}</option>`
+        element.innerHTML+=contenido;
+    }
+}
+
+
 document.addEventListener("DOMContentLoaded", (event) => {
+    
     loadDayForecastData();
+    cargarCiudades();
+
     let element = document.getElementById('loadinfo');
 
     element.addEventListener('click', (event) => {
-    loadWeekForecastData();
+    
+        loadWeekForecastData();
+    
     });
+});
+
+let element = document.getElementById("dropdownMenuButton");
+
+    element.addEventListener('change', (event) => {
+    //Código a ejecutar
+    //El event contiene la información del elemento seleccionado
+    let ciudad = event.target.value
+    loadDayForecastData(ciudad);
+    
+    // let padre = document.getElementsByClassName("list-group")
+    // padre = padre[0]
+    // padre.innerHTML= " "
+
+    loadWeekForecastData(ciudad);
+    
+    
+
 });
 
 
